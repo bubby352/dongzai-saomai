@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>东崽纯肉烧麦店 · 经营工作台 Pro</title>
+<style>
+:root {
+  --primary: #e85d3a;
+  --primary-dark: #c44a2e;
+  --primary-light: #ff8a6a;
+  --primary-50: #fef3ef;
+  --bg: #f0ebe5;
+  --bg2: #e8e0d5;
+  --card: #ffffff;
+  --text: #2d2218;
+  --muted: #8a7a6a;
+  --border: #e0d5c8;
+  --success: #2d9d5e;
+  --success-light: #e8f7ed;
+  --warning: #e8a838;
+  --warning-light: #fef5e7;
+  --danger: #d9534f;
+  --danger-light: #fdeaea;
+  --info: #3b82c4;
+  --info-light: #e8f0fa;
+  --purple: #7c4dc4;
+  --purple-light: #f0e8fa;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========== 侧边栏 ========== */
+.sidebar {
+  position: fixed; top: 0; left: 0;
+  width: 220px; height: 100vh;
+  background: linear-gradient(180deg, #3a2418, #2d1810);
+  color: #e8d5c8;
+  z-index: 200;
+  display: flex; flex-direction: column;
+  transition: transform 0.3s;
+}
+.sidebar-header { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); text-align: center; }
+.sidebar-header .logo { font-size: 36px; }
+.sidebar-header h2 { font-size: 16px; font-weight: 700; color: #fff; margin-top: 4px; }
+.sidebar-header p { font-size: 11px; color: #b8a090; margin-top: 2px; }
+.sidebar-nav { flex: 1; padding: 12px; overflow-y: auto; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 14px; font-weight: 500;
+  color: #c8b0a0; transition: all 0.2s;
+  margin-bottom: 4px; border: none; background: transparent;
+  width: 100%; text-align: left; font-family: inherit;
+}
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff; box-shadow: 0 2px 8px rgba(232,93,58,0.3);
+}
+.nav-item .nav-icon { font-size: 18px; width: 24px; text-align: center; }
+.nav-item .nav-badge {
+  margin-left: auto; background: rgba(255,255,255,0.15);
+  color: #fff; font-size: 11px; padding: 1px 7px;
+  border-radius: 10px; font-weight: 600;
+}
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 11px; color: #8a7060; text-align: center; }
+
+/* ========== 主区域 ========== */
+.main { margin-left: 220px; min-height: 100vh; }
+.topbar {
+  background: var(--card); padding: 16px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow);
+}
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.topbar-left h1 { font-size: 20px; font-weight: 700; }
+.topbar-left .sub { font-size: 13px; color: var(--muted); }
+.topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+.month-selector {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg); border-radius: 20px; padding: 4px;
+}
+.month-selector button {
+  border: none; background: transparent;
+  width: 28px; height: 28px; border-radius: 50%;
+  cursor: pointer; font-size: 14px; color: var(--muted); transition: all 0.2s;
+}
+.month-selector button:hover { background: var(--card); color: var(--primary); }
+.month-selector .month-label { font-size: 14px; font-weight: 600; padding: 0 8px; min-width: 90px; text-align: center; }
+
+.btn {
+  padding: 8px 16px; border: none; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: inherit; white-space: nowrap;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+.btn-success { background: var(--success); color: #fff; }
+.btn-success:hover { opacity: 0.9; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { opacity: 0.9; }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+
+.content { padding: 24px 28px; }
+.panel { display: none; }
+.panel.active { display: block; animation: fadeUp 0.35s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* ========== 统计卡片 ========== */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--card); border-radius: var(--radius); padding: 20px;
+  box-shadow: var(--shadow); position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
+}
+.stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+.stat-card.c1::before { background: var(--primary); }
+.stat-card.c2::before { background: var(--info); }
+.stat-card.c3::before { background: var(--warning); }
+.stat-card.c4::before { background: var(--success); }
+.stat-card.c5::before { background: var(--danger); }
+.stat-card.c6::before { background: var(--purple); }
+.stat-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.stat-label { font-size: 13px; color: var(--muted); font-weight: 500; }
+.stat-icon { font-size: 20px; opacity: 0.8; }
+.stat-value { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+.stat-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+/* ========== 卡片 ========== */
+.card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 20px; }
+.card-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.card-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.card-title .badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+.badge-primary { background: var(--primary-50); color: var(--primary); }
+.badge-success { background: var(--success-light); color: var(--success); }
+.badge-warning { background: var(--warning-light); color: var(--warning); }
+.badge-info { background: var(--info-light); color: var(--info); }
+.badge-danger { background: var(--danger-light); color: var(--danger); }
+
+/* ========== 图表 ========== */
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.chart-box { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
+.chart-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+
+.donut-chart { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
+.donut-wrap { position: relative; width: 160px; height: 160px; }
+.donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+.donut-center .dc-val { font-size: 20px; font-weight: 800; }
+.donut-center .dc-label { font-size: 11px; color: var(--muted); }
+.donut-legend { display: flex; flex-direction: column; gap: 10px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.legend-dot { width: 12px; height: 12px; border-radius: 4px; }
+.legend-val { font-weight: 600; margin-left: auto; }
+
+.line-chart-container { width: 100%; overflow-x: auto; }
+.line-chart { min-width: 500px; }
+
+/* ========== 表格 ========== */
+.table-wrap { overflow-x: auto; border-radius: var(--radius-sm); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { background: #faf6f0; padding: 12px 14px; text-align: left; font-weight: 600; color: var(--text); white-space: nowrap; border-bottom: 2px solid var(--border); }
+tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+tbody tr { transition: background 0.15s; }
+tbody tr:hover { background: #faf6f0; }
+tbody tr:last-child td { border-bottom: none; }
+
+.tag { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; }
+.tag-shop { background: var(--primary-50); color: var(--primary); }
+.tag-taste { background: var(--warning-light); color: var(--warning); }
+.tag-home { background: var(--info-light); color: var(--info); }
+.tag-self { background: var(--purple-light); color: var(--purple); }
+.tag-food { background: var(--danger-light); color: var(--danger); }
+.tag-pack { background: var(--info-light); color: var(--info); }
+.tag-util { background: var(--warning-light); color: var(--warning); }
+.tag-labor { background: var(--success-light); color: var(--success); }
+.tag-rent { background: var(--purple-light); color: var(--purple); }
+.tag-other { background: #f0f0f0; color: #666; }
+.tag-meituan { background: #fff3c4; color: #b8860b; }
+.tag-eleme { background: #d4ecff; color: #0078d4; }
+.tag-zipei { background: var(--success-light); color: var(--success); }
+.tag-dada { background: #ffe0d0; color: #ff6b35; }
+.tag-shunfeng { background: #e0e0e0; color: #333; }
+.tag-delivery-other { background: #f0f0f0; color: #666; }
+
+.price { color: var(--danger); font-weight: 700; }
+.amt { font-weight: 700; }
+
+/* ========== 搜索/筛选 ========== */
+.toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.search-input { padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 13px; width: 200px; font-family: inherit; transition: border-color 0.2s; }
+.search-input:focus { outline: none; border-color: var(--primary); }
+.filter-chip { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); background: transparent; color: var(--muted); transition: all 0.2s; font-family: inherit; }
+.filter-chip:hover { border-color: var(--primary-light); }
+.filter-chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* ========== 弹窗 ========== */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
+.modal-overlay.show { display: flex; animation: fadeUp 0.2s ease; }
+.modal { background: var(--card); border-radius: var(--radius); padding: 24px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-field { display: flex; flex-direction: column; gap: 5px; }
+.form-field.full { grid-column: 1/-1; }
+.form-field label { font-size: 12px; font-weight: 600; color: var(--muted); }
+.form-field input, .form-field select, .form-field textarea { padding: 9px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; background: #faf8f5; transition: border-color 0.2s, background 0.2s; }
+.form-field input:focus, .form-field select:focus, .form-field textarea:focus { outline: none; border-color: var(--primary); background: #fff; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+/* ========== 汇总条 ========== */
+.summary-bar { background: linear-gradient(135deg, #faf6f0, #f0e8dc); border-radius: var(--radius); padding: 16px 20px; margin-top: 16px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 16px; border: 1px solid var(--border); }
+.sum-item { text-align: center; min-width: 100px; }
+.sum-item .sl { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.sum-item .sv { font-size: 20px; font-weight: 800; }
+
+/* ========== 每日明细 ========== */
+.day-group { margin-bottom: 16px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+.day-header {
+  background: linear-gradient(135deg, #3a2418, #5a3a28);
+  color: #fff; padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px; cursor: pointer;
+}
+.day-header:hover { background: linear-gradient(135deg, #4a2e1e, #6a4a38); }
+.day-date { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.day-weekday { font-size: 12px; opacity: 0.7; font-weight: 400; }
+.day-totals { display: flex; gap: 16px; flex-wrap: wrap; }
+.day-total-item { display: flex; flex-direction: column; align-items: flex-end; }
+.day-total-item .dt-label { font-size: 10px; opacity: 0.7; }
+.day-total-item .dt-value { font-size: 15px; font-weight: 700; }
+.day-grand { font-size: 20px; font-weight: 800; color: #ffd700; }
+
+.day-body { display: none; background: #fff; }
+.day-body.open { display: block; }
+
+.day-section { padding: 14px 20px; border-bottom: 1px solid var(--border); }
+.day-section:last-child { border-bottom: none; }
+.day-section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.day-section-items { display: flex; flex-direction: column; gap: 6px; }
+.day-item-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px dashed #f0ebe5; }
+.day-item-row:last-child { border-bottom: none; }
+.day-item-name { flex: 1; display: flex; align-items: center; gap: 6px; }
+.day-item-detail { color: var(--muted); font-size: 12px; }
+.day-item-amount { font-weight: 700; min-width: 80px; text-align: right; }
+
+.day-empty { padding: 20px; text-align: center; color: var(--muted); font-size: 13px; }
+
+/* ========== 空状态 ========== */
+.empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+.empty .ei { font-size: 44px; margin-bottom: 10px; }
+
+/* ========== Toast ========== */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: #fff; padding: 12px 20px; border-radius: 10px; box-shadow: var(--shadow-lg); z-index: 9999; display: none; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; }
+.toast.show { display: flex; animation: fadeUp 0.3s ease; }
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+
+/* ========== 移动端 ========== */
+.mobile-toggle { display: none; position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: var(--primary); color: #fff; border: none; font-size: 22px; cursor: pointer; z-index: 300; box-shadow: var(--shadow-lg); }
+
+@media(max-width: 1024px) { .chart-row { grid-template-columns: 1fr; } }
+@media(max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .mobile-toggle { display: flex; align-items: center; justify-content: center; }
+  .content { padding: 16px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .topbar { padding: 12px 16px; }
+  .topbar-left h1 { font-size: 17px; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .stat-value { font-size: 22px; }
+  .day-header { padding: 10px 14px; }
+  .day-totals { gap: 10px; }
+  .day-total-item .dt-value { font-size: 13px; }
+}
+
+/* ========== 进度条 ========== */
+.progress-bar { width: 100%; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; margin-top: 4px; }
+.progress-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+
+/* 月度对比 */
+.compare-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.compare-row:last-child { border-bottom: none; }
+.compare-label { width: 100px; font-size: 13px; font-weight: 600; }
+.compare-bar-wrap { flex: 1; }
+.compare-val { width: 80px; text-align: right; font-size: 14px; font-weight: 700; }
+
+/* 快捷操作 */
+.quick-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.quick-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 20px; border-radius: var(--radius); cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; border: none; font-family: inherit; min-width: 90px; }
+.quick-btn .qb-icon { font-size: 24px; }
+.quick-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.qb-1 { background: var(--primary-50); color: var(--primary); }
+.qb-2 { background: var(--info-light); color: var(--info); }
+.qb-3 { background: var(--warning-light); color: var(--warning); }
+.qb-4 { background: var(--success-light); color: var(--success); }
+.qb-5 { background: var(--danger-light); color: var(--danger); }
+.qb-6 { background: var(--purple-light); color: var(--purple); }
+
+/* FAB */
+.fab { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: #fff; border: none; font-size: 26px; cursor: pointer; z-index: 300; box-shadow: 0 4px 20px rgba(232,93,58,0.4); display: none; align-items: center; justify-content: center; transition: transform 0.2s; }
+.fab:hover { transform: scale(1.08); }
+@media(min-width: 769px) { .fab { display: flex; } }
+
+/* 日期选择 */
+.date-nav { display: flex; align-items: center; gap: 8px; }
+.date-nav input { padding: 6px 10px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; }
+.date-nav input:focus { outline: none; border-color: var(--primary); }
+</style>
+</head>
+<body>
+
+<!-- ========== 侧边栏 ========== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">🥟</div>
+    <h2>东崽纯肉烧麦店</h2>
+    <p>经营工作台 Pro</p>
+  </div>
+  <nav class="sidebar-nav">
+    <button class="nav-item active" onclick="navTo('dashboard',this)"><span class="nav-icon">📊</span> 经营看板</button>
+    <button class="nav-item" onclick="navTo('daily',this)"><span class="nav-icon">📅</span> 每日明细</button>
+    <button class="nav-item" onclick="navTo('kuailv',this)"><span class="nav-icon">🛒</span> 快驴购物账单 <span class="nav-badge" id="nav-kuailv">0</span></button>
+    <button class="nav-item" onclick="navTo('cost',this)"><span class="nav-icon">💰</span> 店内成本 <span class="nav-badge" id="nav-cost">0</span></button>
+    <button class="nav-item" onclick="navTo('delivery',this)"><span class="nav-icon">🚚</span> 配送费支出 <span class="nav-badge" id="nav-delivery">0</span></button>
+    <button class="nav-item" onclick="navTo('report',this)"><span class="nav-icon">📈</span> 月度报表</button>
+  </nav>
+  <div class="sidebar-footer">
+    <p>数据本地存储 · 安全可靠</p>
+    <p style="margin-top:4px;opacity:0.5">v3.0 Pro</p>
+  </div>
+</aside>
+
+<button class="fab" onclick="openQuickAdd()">+</button>
+<button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<!-- ========== 主区域 ========== -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div>
+        <h1 id="pageTitle">经营看板</h1>
+        <div class="sub" id="pageSub">店铺经营数据总览</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="month-selector">
+        <button onclick="changeMonth(-1)">‹</button>
+        <span class="month-label" id="monthLabel">2026年7月</span>
+        <button onclick="changeMonth(1)">›</button>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="exportAll()">📥 导出全部</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ===== 经营看板 ===== -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="quick-actions">
+        <button class="quick-btn qb-1" onclick="openModal('kuailv')"><span class="qb-icon">🛒</span>记一笔采购</button>
+        <button class="quick-btn qb-2" onclick="openModal('cost')"><span class="qb-icon">💵</span>记一笔成本</button>
+        <button class="quick-btn qb-3" onclick="openModal('delivery')"><span class="qb-icon">🚚</span>记一笔配送费</button>
+        <button class="quick-btn qb-6" onclick="navTo('daily',document.querySelectorAll('.nav-item')[1])"><span class="qb-icon">📅</span>每日明细</button>
+        <button class="quick-btn qb-4" onclick="navTo('report',document.querySelectorAll('.nav-item')[5])"><span class="qb-icon">📈</span>查看报表</button>
+        <button class="quick-btn qb-5" onclick="exportAll()"><span class="qb-icon">📥</span>导出数据</button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card c1" onclick="navTo('kuailv',document.querySelectorAll('.nav-item')[2])">
+          <div class="stat-top"><span class="stat-label">快驴采购总额</span><span class="stat-icon">📦</span></div>
+          <div class="stat-value" style="color:var(--primary)" id="d-purchase">¥0</div>
+          <div class="stat-sub" id="d-purchase-sub">本月 0 笔</div>
+        </div>
+        <div class="stat-card c2" onclick="navTo('kuailv',document.querySelectorAll('.nav-item')[2])">
+          <div class="stat-top"><span class="stat-label">店内产品</span><span class="stat-icon">🏪</span></div>
+          <div class="stat-value" style="color:var(--info)" id="d-shop">¥0</div>
+          <div class="stat-sub"><span id="d-shop-pct">0</span>% 占比</div>
+        </div>
+        <div class="stat-card c3" onclick="navTo('kuailv',document.querySelectorAll('.nav-item')[2])">
+          <div class="stat-top"><span class="stat-label">尝新产品</span><span class="stat-icon">🧪</span></div>
+          <div class="stat-value" style="color:var(--warning)" id="d-taste">¥0</div>
+          <div class="stat-sub"><span id="d-taste-pct">0</span>% 占比</div>
+        </div>
+        <div class="stat-card c4" onclick="navTo('kuailv',document.querySelectorAll('.nav-item')[2])">
+          <div class="stat-top"><span class="stat-label">家用产品</span><span class="stat-icon">🏠</span></div>
+          <div class="stat-value" style="color:var(--success)" id="d-home">¥0</div>
+          <div class="stat-sub"><span id="d-home-pct">0</span>% 占比</div>
+        </div>
+        <div class="stat-card c5" onclick="navTo('kuailv',document.querySelectorAll('.nav-item')[2])">
+          <div class="stat-top"><span class="stat-label">自用产品</span><span class="stat-icon">🧳</span></div>
+          <div class="stat-value" style="color:var(--purple)" id="d-self">¥0</div>
+          <div class="stat-sub"><span id="d-self-pct">0</span>% 占比</div>
+        </div>
+        <div class="stat-card c6" onclick="navTo('cost',document.querySelectorAll('.nav-item')[3])">
+          <div class="stat-top"><span class="stat-label">店内总成本</span><span class="stat-icon">💸</span></div>
+          <div class="stat-value" style="color:var(--danger)" id="d-cost">¥0</div>
+          <div class="stat-sub" id="d-cost-sub">本月 0 笔</div>
+        </div>
+        <div class="stat-card c6" onclick="navTo('delivery',document.querySelectorAll('.nav-item')[4])">
+          <div class="stat-top"><span class="stat-label">配送费总支出</span><span class="stat-icon">🚚</span></div>
+          <div class="stat-value" style="color:var(--purple)" id="d-delivery">¥0</div>
+          <div class="stat-sub" id="d-delivery-sub">本月 0 笔</div>
+        </div>
+      </div>
+
+      <div class="chart-row">
+        <div class="chart-box">
+          <div class="chart-title">📊 支出分类占比</div>
+          <div class="donut-chart">
+            <div class="donut-wrap">
+              <svg width="160" height="160" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="60" fill="none" stroke="#f0ebe5" stroke-width="28"/>
+                <circle cx="80" cy="80" r="60" fill="none" stroke="var(--primary)" stroke-width="28" stroke-dasharray="0 377" transform="rotate(-90 80 80)" id="donut1" style="transition:stroke-dasharray 0.8s ease"/>
+                <circle cx="80" cy="80" r="60" fill="none" stroke="var(--danger)" stroke-width="28" stroke-dasharray="0 377" transform="rotate(-90 80 80)" id="donut2" style="transition:stroke-dasharray 0.8s ease, stroke-dashoffset 0.8s ease"/>
+                <circle cx="80" cy="80" r="60" fill="none" stroke="var(--purple)" stroke-width="28" stroke-dasharray="0 377" transform="rotate(-90 80 80)" id="donut3" style="transition:stroke-dasharray 0.8s ease, stroke-dashoffset 0.8s ease"/>
+              </svg>
+              <div class="donut-center">
+                <div class="dc-val" id="donutTotal">¥0</div>
+                <div class="dc-label">总支出</div>
+              </div>
+            </div>
+            <div class="donut-legend" id="donutLegend"></div>
+          </div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">📈 近7日支出趋势</div>
+          <div class="line-chart-container">
+            <svg class="line-chart" width="100%" height="200" viewBox="0 0 500 200" id="lineChart"></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-row">
+        <div class="chart-box">
+          <div class="chart-title">📊 成本分类分布</div>
+          <div id="costBreakdown"></div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">📋 最近记录</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>日期</th><th>项目</th><th>类型</th><th>金额</th></tr></thead>
+              <tbody id="recentAll"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-bar">
+        <div class="sum-item"><div class="sl">📦 采购</div><div class="sv" style="color:var(--primary)" id="d-sum-purchase">¥0</div></div>
+        <div class="sum-item"><div class="sl">💰 成本</div><div class="sv" style="color:var(--danger)" id="d-sum-cost">¥0</div></div>
+        <div class="sum-item"><div class="sl">🚚 配送费</div><div class="sv" style="color:var(--purple)" id="d-sum-delivery">¥0</div></div>
+        <div class="sum-item"><div class="sl">💥 总支出</div><div class="sv" style="color:var(--text)" id="d-sum-total">¥0</div></div>
+      </div>
+    </div>
+
+    <!-- ===== 每日明细 ===== -->
+    <div class="panel" id="panel-daily">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📅 每日费用明细 <span class="badge badge-primary" id="daily-count">0 天</span></div>
+          <div class="date-nav">
+            <input type="date" id="dailyFromDate" onchange="renderDaily()">
+            <span style="font-size:12px;color:var(--muted)">至</span>
+            <input type="date" id="dailyToDate" onchange="renderDaily()">
+          </div>
+        </div>
+        <div class="toolbar">
+          <button class="filter-chip active" onclick="dlRange='month';setFilterChip(this);renderDaily()">本月</button>
+          <button class="filter-chip" onclick="dlRange='week';setFilterChip(this);renderDaily()">近7天</button>
+          <button class="filter-chip" onclick="dlRange='all';setFilterChip(this);renderDaily()">全部</button>
+          <button class="filter-chip" onclick="dlRange='custom';setFilterChip(this);renderDaily()">自定义</button>
+          <button class="btn btn-outline btn-sm" onclick="toggleDailyExpand()">展开/折叠全部</button>
+        </div>
+        <div id="dailyList"></div>
+        <div class="summary-bar">
+          <div class="sum-item"><div class="sl">📦 采购</div><div class="sv" style="color:var(--primary)" id="dl-sum-purchase">¥0</div></div>
+          <div class="sum-item"><div class="sl">💰 成本</div><div class="sv" style="color:var(--danger)" id="dl-sum-cost">¥0</div></div>
+          <div class="sum-item"><div class="sl">🚚 配送费</div><div class="sv" style="color:var(--purple)" id="dl-sum-delivery">¥0</div></div>
+          <div class="sum-item"><div class="sl">💥 总支出</div><div class="sv" style="color:var(--text)" id="dl-sum-total">¥0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 快驴购物账单 ===== -->
+    <div class="panel" id="panel-kuailv">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🛒 快驴平台购物账单 <span class="badge badge-primary" id="kv-count">0 条</span></div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('kuailv')">➕ 添加记录</button>
+        </div>
+        <div class="toolbar">
+          <input type="text" class="search-input" placeholder="🔍 搜索商品名称/备注..." oninput="kvSearch=this.value.toLowerCase();renderKuailv()">
+          <button class="filter-chip active" onclick="kvFilter='all';setFilterChip(this);renderKuailv()">全部</button>
+          <button class="filter-chip" onclick="kvFilter='shop';setFilterChip(this);renderKuailv()">🏪 店内产品</button>
+          <button class="filter-chip" onclick="kvFilter='taste';setFilterChip(this);renderKuailv()">🧪 尝新产品</button>
+          <button class="filter-chip" onclick="kvFilter='home';setFilterChip(this);renderKuailv()">🏠 家用产品</button>
+          <button class="filter-chip" onclick="kvFilter='self';setFilterChip(this);renderKuailv()">🧳 自用产品</button>
+          <button class="btn btn-outline btn-sm" onclick="exportCSV('kuailv')">📥 导出CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>日期</th><th>商品名称</th><th>分类</th><th>数量</th><th>单位</th><th>单价</th><th>小计</th><th>备注</th><th>操作</th></tr></thead>
+            <tbody id="kuailvBody"></tbody>
+          </table>
+        </div>
+        <div class="summary-bar">
+          <div class="sum-item"><div class="sl">🏪 店内产品</div><div class="sv" style="color:var(--primary)" id="kv-sum-shop">¥0</div></div>
+          <div class="sum-item"><div class="sl">🧪 尝新产品</div><div class="sv" style="color:var(--warning)" id="kv-sum-taste">¥0</div></div>
+          <div class="sum-item"><div class="sl">🏠 家用产品</div><div class="sv" style="color:var(--info)" id="kv-sum-home">¥0</div></div>
+          <div class="sum-item"><div class="sl">🧳 自用产品</div><div class="sv" style="color:var(--purple)" id="kv-sum-self">¥0</div></div>
+          <div class="sum-item"><div class="sl">📦 总计</div><div class="sv" style="color:var(--danger)" id="kv-sum-total">¥0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 店内成本 ===== -->
+    <div class="panel" id="panel-cost">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">💰 店内成本记录 <span class="badge badge-danger" id="ct-count">0 条</span></div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('cost')">➕ 添加成本</button>
+        </div>
+        <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:16px" id="costSummaryGrid"></div>
+        <div class="toolbar">
+          <input type="text" class="search-input" placeholder="🔍 搜索成本项目..." oninput="ctSearch=this.value.toLowerCase();renderCost()">
+          <button class="filter-chip active" onclick="ctFilter='all';setFilterChip(this);renderCost()">全部</button>
+          <button class="filter-chip" onclick="ctFilter='food';setFilterChip(this);renderCost()">🥩 食材</button>
+          <button class="filter-chip" onclick="ctFilter='packaging';setFilterChip(this);renderCost()">📦 包装</button>
+          <button class="filter-chip" onclick="ctFilter='utility';setFilterChip(this);renderCost()">⚡ 水电</button>
+          <button class="filter-chip" onclick="ctFilter='labor';setFilterChip(this);renderCost()">👨‍🍳 人工</button>
+          <button class="filter-chip" onclick="ctFilter='rent';setFilterChip(this);renderCost()">🏠 房租</button>
+          <button class="filter-chip" onclick="ctFilter='other';setFilterChip(this);renderCost()">📋 其他</button>
+          <button class="btn btn-outline btn-sm" onclick="exportCSV('cost')">📥 导出CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>日期</th><th>成本项目</th><th>类别</th><th>金额</th><th>备注</th><th>操作</th></tr></thead>
+            <tbody id="costBody"></tbody>
+          </table>
+        </div>
+        <div class="summary-bar">
+          <div class="sum-item"><div class="sl">💰 总成本</div><div class="sv" style="color:var(--danger)" id="ct-total">¥0</div></div>
+          <div class="sum-item"><div class="sl">📊 记录数</div><div class="sv" style="color:var(--primary)" id="ct-records">0</div></div>
+          <div class="sum-item"><div class="sl">📅 日均成本</div><div class="sv" style="color:var(--warning)" id="ct-daily">¥0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 配送费支出 ===== -->
+    <div class="panel" id="panel-delivery">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🚚 店内配送费支出 <span class="badge badge-info" id="dl-count">0 条</span></div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('delivery')">➕ 添加配送费</button>
+        </div>
+        <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:16px" id="deliverySummaryGrid"></div>
+        <div class="toolbar">
+          <input type="text" class="search-input" placeholder="🔍 搜索平台/备注..." oninput="dvSearch=this.value.toLowerCase();renderDelivery()">
+          <button class="filter-chip active" onclick="dvFilter='all';setFilterChip(this);renderDelivery()">全部</button>
+          <button class="filter-chip" onclick="dvFilter='美团';setFilterChip(this);renderDelivery()">🟡 美团</button>
+          <button class="filter-chip" onclick="dvFilter='饿了么';setFilterChip(this);renderDelivery()">🔵 饿了么</button>
+          <button class="filter-chip" onclick="dvFilter='自配送';setFilterChip(this);renderDelivery()">🟢 自配送</button>
+          <button class="filter-chip" onclick="dvFilter='达达';setFilterChip(this);renderDelivery()">🟠 达达</button>
+          <button class="filter-chip" onclick="dvFilter='顺丰';setFilterChip(this);renderDelivery()">⚫ 顺丰</button>
+          <button class="btn btn-outline btn-sm" onclick="exportCSV('delivery')">📥 导出CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>日期</th><th>配送平台</th><th>订单数</th><th>配送费</th><th>单均</th><th>备注</th><th>操作</th></tr></thead>
+            <tbody id="deliveryBody"></tbody>
+          </table>
+        </div>
+        <div class="summary-bar">
+          <div class="sum-item"><div class="sl">🚚 总配送费</div><div class="sv" style="color:var(--purple)" id="dv-total">¥0</div></div>
+          <div class="sum-item"><div class="sl">📦 总订单数</div><div class="sv" style="color:var(--primary)" id="dv-orders">0</div></div>
+          <div class="sum-item"><div class="sl">📊 记录数</div><div class="sv" style="color:var(--info)" id="dv-records">0</div></div>
+          <div class="sum-item"><div class="sl">📉 单均成本</div><div class="sv" style="color:var(--warning)" id="dv-avg">¥0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 月度报表 ===== -->
+    <div class="panel" id="panel-report">
+      <div class="chart-row">
+        <div class="chart-box">
+          <div class="chart-title">📊 月度支出分类对比</div>
+          <div id="reportBars"></div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">💰 月度成本分类对比</div>
+          <div id="reportCostBars"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📈 月度经营数据汇总</div>
+          <button class="btn btn-outline btn-sm" onclick="exportCSV('report')">📥 导出报表</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>月份</th><th>店内产品</th><th>尝新产品</th><th>家用产品</th><th>自用产品</th><th>采购总额</th><th>店内成本</th><th>配送费</th><th>合计支出</th></tr>
+            </thead>
+            <tbody id="reportBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========== 弹窗 ========== -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">添加记录</div>
+    <div id="modalContent"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" id="modalSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toastText"></span></div>
+
+<script>
+// ==================== 数据层 ====================
+const KEY = 'dz_workbench_v4';
+let data = { kuailv: [], cost: [], delivery: [] };
+let currentMonth = new Date();
+let kvFilter = 'all', kvSearch = '';
+let ctFilter = 'all', ctSearch = '';
+let dvFilter = 'all', dvSearch = '';
+let dlRange = 'month';
+let dailyAllExpand = false;
+
+function loadData() {
+  const s = localStorage.getItem(KEY);
+  if (s) {
+    try { data = JSON.parse(s); if(!data.delivery) data.delivery=[]; } catch(e) { initSample(); }
+  } else {
+    initSample();
+  }
+}
+function saveData() { localStorage.setItem(KEY, JSON.stringify(data)); }
+function genId(arr) { return arr.length ? Math.max(...arr.map(x=>x.id))+1 : 1; }
+function today() { return new Date().toISOString().split('T')[0]; }
+
+function initSample() {
+  data.kuailv = [];
+  data.cost = [];
+  data.delivery = [];
+  saveData();
+}
+
+// ==================== 工具 ====================
+function fmtMoney(n) { return '¥' + Number(n).toFixed(2); }
+function fmtMoneyShort(n) { return n >= 10000 ? '¥' + (n/10000).toFixed(1) + '万' : '¥' + n.toFixed(0); }
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastText').textContent = (type==='success'?'✅ ':'❌ ') + msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 2000);
+}
+function monthKey(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'); }
+function monthLabel(d) { return d.getFullYear() + '年' + (d.getMonth()+1) + '月'; }
+function isThisMonth(dateStr, d) { return dateStr ? dateStr.startsWith(monthKey(d)) : true; }
+function weekdayLabel(dateStr) {
+  const wd = ['周日','周一','周二','周三','周四','周五','周六'];
+  return wd[new Date(dateStr).getDay()];
+}
+function dateLabel(dateStr) {
+  const d = new Date(dateStr);
+  return (d.getMonth()+1) + '月' + d.getDate() + '日';
+}
+
+// ==================== 导航 ====================
+const pageTitles = {
+  dashboard: ['经营看板','店铺经营数据总览'],
+  daily: ['每日明细','按日汇总所有费用分区'],
+  kuailv: ['快驴购物账单','平台采购记录管理'],
+  cost: ['店内成本','店铺运营成本管理'],
+  delivery: ['配送费支出','每日配送费支出记录'],
+  report: ['月度报表','经营数据分析']
+};
+function navTo(page, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-'+page).classList.add('active');
+  if (btn) btn.classList.add('active');
+  document.getElementById('pageTitle').textContent = pageTitles[page][0];
+  document.getElementById('pageSub').textContent = pageTitles[page][1];
+  document.getElementById('sidebar').classList.remove('open');
+  window.scrollTo(0, 0);
+  if (page==='dashboard') renderDashboard();
+  if (page==='daily') renderDaily();
+  if (page==='report') renderReport();
+}
+function changeMonth(delta) {
+  currentMonth.setMonth(currentMonth.getMonth() + delta);
+  document.getElementById('monthLabel').textContent = monthLabel(currentMonth);
+  refreshAll();
+}
+
+// ==================== 弹窗 ====================
+function openModal(type, id) {
+  const existing = id ? data[type].find(x => x.id === id) : null;
+  let title = '', content = '';
+  if (type === 'kuailv') {
+    title = id ? '编辑采购记录' : '➕ 添加快驴采购记录';
+    content = `<div class="form-grid">
+      <div class="form-field full"><label>商品名称 *</label><input type="text" id="m-name" value="${existing?existing.name:''}" placeholder="如：猪前腿肉"></div>
+      <div class="form-field"><label>分类 *</label><select id="m-category">
+        <option value="shop" ${existing&&existing.category==='shop'?'selected':''}>🏪 店内产品</option>
+        <option value="taste" ${existing&&existing.category==='taste'?'selected':''}>🧪 尝新产品</option>
+        <option value="home" ${existing&&existing.category==='home'?'selected':''}>🏠 家用产品</option>
+        <option value="self" ${existing&&existing.category==='self'?'selected':''}>🧳 自用产品</option>
+      </select></div>
+      <div class="form-field"><label>数量 *</label><input type="number" id="m-qty" value="${existing?existing.qty:''}" step="0.01" placeholder="如：10"></div>
+      <div class="form-field"><label>单位</label><select id="m-unit">${['斤','公斤','袋','箱','瓶','包','个','份'].map(u=>`<option value="${u}" ${existing&&existing.unit===u?'selected':''}>${u}</option>`).join('')}</select></div>
+      <div class="form-field"><label>单价(元) *</label><input type="number" id="m-price" value="${existing?existing.price:''}" step="0.01" placeholder="如：12.5"></div>
+      <div class="form-field"><label>采购日期</label><input type="date" id="m-date" value="${existing?existing.date:today()}"></div>
+      <div class="form-field full"><label>备注</label><input type="text" id="m-note" value="${existing?existing.note:''}" placeholder="备注信息"></div>
+    </div>`;
+  } else if (type === 'cost') {
+    title = id ? '编辑成本记录' : '➕ 添加成本记录';
+    content = `<div class="form-grid">
+      <div class="form-field full"><label>成本项目 *</label><input type="text" id="m-name" value="${existing?existing.name:''}" placeholder="如：猪肉采购"></div>
+      <div class="form-field"><label>成本类别 *</label><select id="m-category">
+        <option value="food" ${existing&&existing.category==='food'?'selected':''}>🥩 食材原料</option>
+        <option value="packaging" ${existing&&existing.category==='packaging'?'selected':''}>📦 包装耗材</option>
+        <option value="utility" ${existing&&existing.category==='utility'?'selected':''}>⚡ 水电燃气</option>
+        <option value="labor" ${existing&&existing.category==='labor'?'selected':''}>👨‍🍳 人工</option>
+        <option value="rent" ${existing&&existing.category==='rent'?'selected':''}>🏠 房租</option>
+        <option value="other" ${existing&&existing.category==='other'?'selected':''}>📋 其他</option>
+      </select></div>
+      <div class="form-field"><label>金额(元) *</label><input type="number" id="m-amount" value="${existing?existing.amount:''}" step="0.01" placeholder="如：200"></div>
+      <div class="form-field"><label>日期</label><input type="date" id="m-date" value="${existing?existing.date:today()}"></div>
+      <div class="form-field full"><label>备注</label><input type="text" id="m-note" value="${existing?existing.note:''}" placeholder="备注"></div>
+    </div>`;
+  } else if (type === 'delivery') {
+    title = id ? '编辑配送费记录' : '➕ 添加配送费支出';
+    content = `<div class="form-grid">
+      <div class="form-field"><label>配送平台 *</label><select id="m-platform">${['美团','饿了么','自配送','达达','顺丰','其他'].map(p=>`<option value="${p}" ${existing&&existing.platform===p?'selected':''}>${p}</option>`).join('')}</select></div>
+      <div class="form-field"><label>订单数</label><input type="number" id="m-orders" value="${existing?existing.orders:''}" step="1" placeholder="如：10"></div>
+      <div class="form-field"><label>配送费(元) *</label><input type="number" id="m-amount" value="${existing?existing.amount:''}" step="0.5" placeholder="如：36"></div>
+      <div class="form-field"><label>日期</label><input type="date" id="m-date" value="${existing?existing.date:today()}"></div>
+      <div class="form-field full"><label>备注</label><input type="text" id="m-note" value="${existing?existing.note:''}" placeholder="如：外卖订单"></div>
+    </div>`;
+  }
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalContent').innerHTML = content;
+  document.getElementById('modalOverlay').classList.add('show');
+  document.getElementById('modalSave').onclick = () => saveModal(type, id);
+}
+function openQuickAdd() { openModal('kuailv'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
+
+function saveModal(type, id) {
+  if (type === 'kuailv') {
+    const name = document.getElementById('m-name').value.trim();
+    const category = document.getElementById('m-category').value;
+    const qty = parseFloat(document.getElementById('m-qty').value);
+    const unit = document.getElementById('m-unit').value;
+    const price = parseFloat(document.getElementById('m-price').value);
+    const date = document.getElementById('m-date').value || today();
+    const note = document.getElementById('m-note').value.trim();
+    if (!name || !qty || !price || isNaN(qty) || isNaN(price)) { showToast('请填写完整信息','error'); return; }
+    if (id) { Object.assign(data.kuailv.find(x=>x.id===id), {name,category,qty,unit,price,date,note}); }
+    else { data.kuailv.push({id:genId(data.kuailv),name,category,qty,unit,price,date,note}); }
+    showToast('采购记录已保存');
+  } else if (type === 'cost') {
+    const name = document.getElementById('m-name').value.trim();
+    const category = document.getElementById('m-category').value;
+    const amount = parseFloat(document.getElementById('m-amount').value);
+    const date = document.getElementById('m-date').value || today();
+    const note = document.getElementById('m-note').value.trim();
+    if (!name || !amount || isNaN(amount)) { showToast('请填写完整信息','error'); return; }
+    if (id) { Object.assign(data.cost.find(x=>x.id===id), {name,category,amount,date,note}); }
+    else { data.cost.push({id:genId(data.cost),name,category,amount,date,note}); }
+    showToast('成本记录已保存');
+  } else if (type === 'delivery') {
+    const platform = document.getElementById('m-platform').value;
+    const orders = parseInt(document.getElementById('m-orders').value) || 0;
+    const amount = parseFloat(document.getElementById('m-amount').value);
+    const date = document.getElementById('m-date').value || today();
+    const note = document.getElementById('m-note').value.trim();
+    if (isNaN(amount)) { showToast('请填写配送费金额','error'); return; }
+    if (id) { Object.assign(data.delivery.find(x=>x.id===id), {platform,orders,amount,date,note}); }
+    else { data.delivery.push({id:genId(data.delivery),platform,orders,amount,date,note}); }
+    showToast('配送费记录已保存');
+  }
+  saveData(); closeModal(); refreshAll();
+}
+function delItem(type, id) {
+  if (!confirm('确认删除？')) return;
+  data[type] = data[type].filter(x => x.id !== id);
+  saveData(); refreshAll(); showToast('已删除');
+}
+function setFilterChip(btn) {
+  document.querySelectorAll('.panel.active .filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ==================== 标签 ====================
+function catLabel(c) { return {shop:'店内产品',taste:'尝新产品',home:'家用产品',self:'自用产品'}[c] || c; }
+function costCatLabel(c) { return {food:'食材原料',packaging:'包装耗材',utility:'水电燃气',labor:'人工',rent:'房租',other:'其他'}[c] || c; }
+function deliveryTagClass(p) {
+  const map = {'美团':'meituan','饿了么':'eleme','自配送':'zipei','达达':'dada','顺丰':'shunfeng'};
+  return 'tag-' + (map[p] || 'delivery-other');
+}
+
+// ==================== 看板 ====================
+function renderDashboard() {
+  const mK = data.kuailv.filter(x => isThisMonth(x.date, currentMonth));
+  const mC = data.cost.filter(x => isThisMonth(x.date, currentMonth));
+  const mD = data.delivery.filter(x => isThisMonth(x.date, currentMonth));
+
+  const sShop = mK.filter(x=>x.category==='shop').reduce((s,x)=>s+x.qty*x.price,0);
+  const sTaste = mK.filter(x=>x.category==='taste').reduce((s,x)=>s+x.qty*x.price,0);
+  const sHome = mK.filter(x=>x.category==='home').reduce((s,x)=>s+x.qty*x.price,0);
+  const sSelf = mK.filter(x=>x.category==='self').reduce((s,x)=>s+x.qty*x.price,0);
+  const totalPurchase = sShop + sTaste + sHome + sSelf;
+  const totalCost = mC.reduce((s,x)=>s+x.amount,0);
+  const totalDelivery = mD.reduce((s,x)=>s+x.amount,0);
+  const totalAll = totalPurchase + totalCost + totalDelivery;
+
+  document.getElementById('d-purchase').textContent = fmtMoney(totalPurchase);
+  document.getElementById('d-purchase-sub').textContent = monthLabel(currentMonth) + ' · ' + mK.length + ' 笔';
+  document.getElementById('d-shop').textContent = fmtMoney(sShop);
+  document.getElementById('d-taste').textContent = fmtMoney(sTaste);
+  document.getElementById('d-home').textContent = fmtMoney(sHome);
+  document.getElementById('d-self').textContent = fmtMoney(sSelf);
+  document.getElementById('d-cost').textContent = fmtMoney(totalCost);
+  document.getElementById('d-cost-sub').textContent = monthLabel(currentMonth) + ' · ' + mC.length + ' 笔';
+  document.getElementById('d-delivery').textContent = fmtMoney(totalDelivery);
+  document.getElementById('d-delivery-sub').textContent = monthLabel(currentMonth) + ' · ' + mD.length + ' 笔';
+
+  const pct = v => totalPurchase ? Math.round(v/totalPurchase*100) : 0;
+  document.getElementById('d-shop-pct').textContent = pct(sShop);
+  document.getElementById('d-taste-pct').textContent = pct(sTaste);
+  document.getElementById('d-home-pct').textContent = pct(sHome);
+  document.getElementById('d-self-pct').textContent = pct(sSelf);
+
+  // 环形图：采购 / 成本 / 配送费
+  const C = 2 * Math.PI * 60;
+  const seg1 = totalAll ? (totalPurchase/totalAll)*C : 0;
+  const seg2 = totalAll ? (totalCost/totalAll)*C : 0;
+  const seg3 = totalAll ? (totalDelivery/totalAll)*C : 0;
+  document.getElementById('donut1').setAttribute('stroke-dasharray', `${seg1} ${C}`);
+  document.getElementById('donut2').setAttribute('stroke-dasharray', `${seg2} ${C}`);
+  document.getElementById('donut2').setAttribute('stroke-dashoffset', `${-seg1}`);
+  document.getElementById('donut3').setAttribute('stroke-dasharray', `${seg3} ${C}`);
+  document.getElementById('donut3').setAttribute('stroke-dashoffset', `${-(seg1+seg2)}`);
+  document.getElementById('donutTotal').textContent = fmtMoneyShort(totalAll);
+  document.getElementById('donutLegend').innerHTML = `
+    <div class="legend-item"><span class="legend-dot" style="background:var(--primary)"></span>📦 快驴采购 <span class="legend-val">${fmtMoney(totalPurchase)}</span></div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--danger)"></span>💰 店内成本 <span class="legend-val">${fmtMoney(totalCost)}</span></div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--purple)"></span>🚚 配送费 <span class="legend-val">${fmtMoney(totalDelivery)}</span></div>
+  `;
+
+  renderLineChart();
+  renderCostBreakdown(mC);
+
+  // 最近记录（混合）
+  const allRecent = [
+    ...mK.map(x => ({date:x.date, name:x.name, type:'采购', tag:catLabel(x.category), amount:x.qty*x.price})),
+    ...mC.map(x => ({date:x.date, name:x.name, type:'成本', tag:costCatLabel(x.category), amount:x.amount})),
+    ...mD.map(x => ({date:x.date, name:x.platform+'配送费', type:'配送费', tag:x.platform, amount:x.amount}))
+  ].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0,6);
+  document.getElementById('recentAll').innerHTML = allRecent.length ? allRecent.map(x => `
+    <tr><td>${x.date}</td><td><strong>${x.name}</strong></td><td style="font-size:12px;color:var(--muted)">${x.type}·${x.tag}</td><td class="price">${fmtMoney(x.amount)}</td></tr>
+  `).join('') : '<tr><td colspan="4" class="empty"><div class="ei">📭</div>暂无记录</td></tr>';
+
+  // 底部汇总
+  document.getElementById('d-sum-purchase').textContent = fmtMoney(totalPurchase);
+  document.getElementById('d-sum-cost').textContent = fmtMoney(totalCost);
+  document.getElementById('d-sum-delivery').textContent = fmtMoney(totalDelivery);
+  document.getElementById('d-sum-total').textContent = fmtMoney(totalAll);
+}
+
+function renderLineChart() {
+  const days = [];
+  for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate()-i); days.push(d); }
+  const values = days.map(d => {
+    const ds = d.toISOString().split('T')[0];
+    const kv = data.kuailv.filter(x => x.date === ds).reduce((s,x)=>s+x.qty*x.price,0);
+    const ct = data.cost.filter(x => x.date === ds).reduce((s,x)=>s+x.amount,0);
+    const dv = data.delivery.filter(x => x.date === ds).reduce((s,x)=>s+x.amount,0);
+    return kv + ct + dv;
+  });
+  const maxV = Math.max(...values, 1);
+  const w = 500, h = 200, pad = 30, stepX = (w - pad*2) / 6;
+  const points = values.map((v,i) => ({x: pad+i*stepX, y: h-pad-(v/maxV)*(h-pad*2), v}));
+  const path = points.map((p,i) => (i===0?'M':'L')+p.x+','+p.y).join(' ');
+  const areaPath = path + ` L${points[points.length-1].x},${h-pad} L${points[0].x},${h-pad} Z`;
+  const dots = points.map(p => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="var(--primary)"/><text x="${p.x}" y="${p.y-10}" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text)">${p.v>0?'¥'+p.v.toFixed(0):''}</text>`).join('');
+  const labels = days.map((d,i) => `<text x="${pad+i*stepX}" y="${h-8}" text-anchor="middle" font-size="10" fill="var(--muted)">${d.getMonth()+1}/${d.getDate()}</text>`).join('');
+  document.getElementById('lineChart').innerHTML = `
+    <defs><linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--primary)" stop-opacity="0.2"/><stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/></linearGradient></defs>
+    <path d="${areaPath}" fill="url(#areaGrad)"/><path d="${path}" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linejoin="round"/>${dots}${labels}`;
+}
+
+function renderCostBreakdown(costs) {
+  const cats = [
+    {key:'food',label:'🥩 食材原料',color:'var(--danger)'},
+    {key:'packaging',label:'📦 包装耗材',color:'var(--info)'},
+    {key:'utility',label:'⚡ 水电燃气',color:'var(--warning)'},
+    {key:'labor',label:'👨‍🍳 人工',color:'var(--success)'},
+    {key:'rent',label:'🏠 房租',color:'var(--purple)'},
+    {key:'other',label:'📋 其他',color:'#999'}
+  ];
+  const total = costs.reduce((s,x)=>s+x.amount,0) || 1;
+  document.getElementById('costBreakdown').innerHTML = cats.map(c => {
+    const val = costs.filter(x=>x.category===c.key).reduce((s,x)=>s+x.amount,0);
+    const pct = (val/total*100).toFixed(1);
+    return `<div class="compare-row"><div class="compare-label">${c.label}</div><div class="compare-bar-wrap"><div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${c.color}"></div></div></div><div class="compare-val" style="color:${c.color}">${fmtMoney(val)}</div></div>`;
+  }).join('');
+}
+
+// ==================== 每日明细 ====================
+function renderDaily() {
+  let fromDate, toDate;
+  if (dlRange === 'month') {
+    const mk = monthKey(currentMonth);
+    fromDate = mk + '-01';
+    toDate = mk + '-31';
+  } else if (dlRange === 'week') {
+    const d = new Date(); d.setDate(d.getDate()-6);
+    fromDate = d.toISOString().split('T')[0];
+    toDate = today();
+  } else if (dlRange === 'custom') {
+    fromDate = document.getElementById('dailyFromDate').value || today();
+    toDate = document.getElementById('dailyToDate').value || today();
+  } else {
+    fromDate = '0000-01-01'; toDate = '9999-12-31';
+  }
+
+  // 收集所有日期
+  const allItems = [
+    ...data.kuailv.map(x => ({...x, _type:'kuailv', _amount: x.qty*x.price})),
+    ...data.cost.map(x => ({...x, _type:'cost', _amount: x.amount})),
+    ...data.delivery.map(x => ({...x, _type:'delivery', _amount: x.amount}))
+  ];
+  const filtered = allItems.filter(x => x.date >= fromDate && x.date <= toDate);
+  const dateMap = {};
+  filtered.forEach(x => {
+    if (!dateMap[x.date]) dateMap[x.date] = { kuailv: [], cost: [], delivery: [] };
+    dateMap[x.date][x._type].push(x);
+  });
+  const sortedDates = Object.keys(dateMap).sort().reverse();
+
+  // 初始化日期输入
+  if (dlRange === 'custom' && !document.getElementById('dailyFromDate').value) {
+    document.getElementById('dailyFromDate').value = today();
+    document.getElementById('dailyToDate').value = today();
+  }
+
+  let totalK = 0, totalC = 0, totalD = 0;
+  const html = sortedDates.length ? sortedDates.map(date => {
+    const d = dateMap[date];
+    const sK = d.kuailv.reduce((s,x)=>s+x._amount,0);
+    const sC = d.cost.reduce((s,x)=>s+x.amount,0);
+    const sD = d.delivery.reduce((s,x)=>s+x.amount,0);
+    const sTotal = sK + sC + sD;
+    totalK += sK; totalC += sC; totalD += sD;
+
+    return `<div class="day-group">
+      <div class="day-header" onclick="toggleDayBody(this)">
+        <div class="day-date">📅 ${dateLabel(date)} <span class="day-weekday">${weekdayLabel(date)}</span></div>
+        <div class="day-totals">
+          <div class="day-total-item"><span class="dt-label">📦采购</span><span class="dt-value" style="color:#ff8a6a">${fmtMoney(sK)}</span></div>
+          <div class="day-total-item"><span class="dt-label">💰成本</span><span class="dt-value" style="color:#ff6b6b">${fmtMoney(sC)}</span></div>
+          <div class="day-total-item"><span class="dt-label">🚚配送</span><span class="dt-value" style="color:#b885d4">${fmtMoney(sD)}</span></div>
+          <div class="day-total-item"><span class="dt-label">合计</span><span class="day-grand">${fmtMoney(sTotal)}</span></div>
+        </div>
+      </div>
+      <div class="day-body ${dailyAllExpand?'open':''}">
+        ${renderDaySection('🛒 快驴采购', d.kuailv, 'kuailv')}
+        ${renderDaySection('💰 店内成本', d.cost, 'cost')}
+        ${renderDaySection('🚚 配送费', d.delivery, 'delivery')}
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty"><div class="ei">📭</div><p>该时间范围暂无记录</p></div>';
+
+  document.getElementById('dailyList').innerHTML = html;
+  document.getElementById('daily-count').textContent = sortedDates.length + ' 天';
+  document.getElementById('dl-sum-purchase').textContent = fmtMoney(totalK);
+  document.getElementById('dl-sum-cost').textContent = fmtMoney(totalC);
+  document.getElementById('dl-sum-delivery').textContent = fmtMoney(totalD);
+  document.getElementById('dl-sum-total').textContent = fmtMoney(totalK + totalC + totalD);
+}
+
+function renderDaySection(title, items, type) {
+  if (!items.length) return '';
+  let rows = '';
+  if (type === 'kuailv') {
+    rows = items.map(x => `<div class="day-item-row">
+      <div class="day-item-name"><span class="tag tag-${x.category}">${catLabel(x.category)}</span> ${x.name} <span class="day-item-detail">· ${x.qty}${x.unit} × ¥${x.price}</span></div>
+      <div class="day-item-amount price">${fmtMoney(x._amount)}</div>
+    </div>`).join('');
+  } else if (type === 'cost') {
+    rows = items.map(x => `<div class="day-item-row">
+      <div class="day-item-name"><span class="tag tag-${x.category==='packaging'?'pack':x.category}">${costCatLabel(x.category)}</span> ${x.name} <span class="day-item-detail">· ${x.note||''}</span></div>
+      <div class="day-item-amount price">${fmtMoney(x.amount)}</div>
+    </div>`).join('');
+  } else if (type === 'delivery') {
+    rows = items.map(x => `<div class="day-item-row">
+      <div class="day-item-name"><span class="tag ${deliveryTagClass(x.platform)}">${x.platform}</span> 配送费 <span class="day-item-detail">· ${x.orders}单 ${x.note?'· '+x.note:''}</span></div>
+      <div class="day-item-amount price">${fmtMoney(x.amount)}</div>
+    </div>`).join('');
+  }
+  return `<div class="day-section">
+    <div class="day-section-title">${title} <span style="font-size:12px;color:var(--muted);font-weight:400">（${items.length}条）</span></div>
+    <div class="day-section-items">${rows}</div>
+  </div>`;
+}
+
+function toggleDayBody(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+function toggleDailyExpand() {
+  dailyAllExpand = !dailyAllExpand;
+  document.querySelectorAll('#dailyList .day-body').forEach(b => {
+    if (dailyAllExpand) b.classList.add('open');
+    else b.classList.remove('open');
+  });
+}
+
+// ==================== 快驴表格 ====================
+function renderKuailv() {
+  let list = data.kuailv.filter(x => isThisMonth(x.date, currentMonth));
+  if (kvFilter !== 'all') list = list.filter(x => x.category === kvFilter);
+  if (kvSearch) list = list.filter(x => x.name.toLowerCase().includes(kvSearch) || (x.note||'').toLowerCase().includes(kvSearch));
+  list.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  document.getElementById('kuailvBody').innerHTML = list.length ? list.map(x => `
+    <tr><td>${x.date}</td><td><strong>${x.name}</strong></td><td><span class="tag tag-${x.category}">${catLabel(x.category)}</span></td>
+    <td class="amt" style="color:var(--success)">${x.qty}</td><td>${x.unit}</td><td class="price">¥${x.price.toFixed(2)}</td><td class="price"><strong>¥${(x.qty*x.price).toFixed(2)}</strong></td>
+    <td style="color:var(--muted);font-size:12px">${x.note||'-'}</td>
+    <td><div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm" onclick="openModal('kuailv',${x.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="delItem('kuailv',${x.id})">🗑️</button></div></td></tr>
+  `).join('') : '<tr><td colspan="9"><div class="empty"><div class="ei">📭</div>暂无记录</div></td></tr>';
+
+  const mK = data.kuailv.filter(x => isThisMonth(x.date, currentMonth));
+  const s1 = mK.filter(x=>x.category==='shop').reduce((s,x)=>s+x.qty*x.price,0);
+  const s2 = mK.filter(x=>x.category==='taste').reduce((s,x)=>s+x.qty*x.price,0);
+  const s3 = mK.filter(x=>x.category==='home').reduce((s,x)=>s+x.qty*x.price,0);
+  const s4 = mK.filter(x=>x.category==='self').reduce((s,x)=>s+x.qty*x.price,0);
+  document.getElementById('kv-sum-shop').textContent = fmtMoney(s1);
+  document.getElementById('kv-sum-taste').textContent = fmtMoney(s2);
+  document.getElementById('kv-sum-home').textContent = fmtMoney(s3);
+  document.getElementById('kv-sum-self').textContent = fmtMoney(s4);
+  document.getElementById('kv-sum-total').textContent = fmtMoney(s1+s2+s3+s4);
+  document.getElementById('kv-count').textContent = mK.length + ' 条';
+  document.getElementById('nav-kuailv').textContent = data.kuailv.length;
+}
+
+// ==================== 成本表格 ====================
+function renderCost() {
+  let list = data.cost.filter(x => isThisMonth(x.date, currentMonth));
+  if (ctFilter !== 'all') list = list.filter(x => x.category === ctFilter);
+  if (ctSearch) list = list.filter(x => x.name.toLowerCase().includes(ctSearch) || (x.note||'').toLowerCase().includes(ctSearch));
+  list.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  document.getElementById('costBody').innerHTML = list.length ? list.map(x => `
+    <tr><td>${x.date}</td><td><strong>${x.name}</strong></td><td><span class="tag tag-${x.category==='packaging'?'pack':x.category}">${costCatLabel(x.category)}</span></td>
+    <td class="price"><strong>¥${x.amount.toFixed(2)}</strong></td><td style="color:var(--muted);font-size:12px">${x.note||'-'}</td>
+    <td><div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm" onclick="openModal('cost',${x.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="delItem('cost',${x.id})">🗑️</button></div></td></tr>
+  `).join('') : '<tr><td colspan="6"><div class="empty"><div class="ei">📭</div>暂无成本记录</div></td></tr>';
+
+  const cats = [
+    {key:'food',label:'🥩 食材',color:'var(--danger)'},
+    {key:'packaging',label:'📦 包装',color:'var(--info)'},
+    {key:'utility',label:'⚡ 水电',color:'var(--warning)'},
+    {key:'labor',label:'👨‍🍳 人工',color:'var(--success)'},
+    {key:'rent',label:'🏠 房租',color:'var(--purple)'},
+    {key:'other',label:'📋 其他',color:'#666'}
+  ];
+  const mC = data.cost.filter(x => isThisMonth(x.date, currentMonth));
+  const total = mC.reduce((s,x)=>s+x.amount,0);
+  document.getElementById('costSummaryGrid').innerHTML = cats.map(c => {
+    const val = mC.filter(x=>x.category===c.key).reduce((s,x)=>s+x.amount,0);
+    return `<div class="stat-card" style="padding:14px;box-shadow:var(--shadow);border-left:4px solid ${c.color}"><div class="stat-label" style="font-size:12px">${c.label}</div><div class="stat-value" style="font-size:20px;color:${c.color}">${fmtMoney(val)}</div></div>`;
+  }).join('');
+
+  const days = new Set(mC.map(x=>x.date)).size || 1;
+  document.getElementById('ct-total').textContent = fmtMoney(total);
+  document.getElementById('ct-records').textContent = mC.length;
+  document.getElementById('ct-daily').textContent = fmtMoney(total/days);
+  document.getElementById('ct-count').textContent = mC.length + ' 条';
+  document.getElementById('nav-cost').textContent = data.cost.length;
+}
+
+// ==================== 配送费支出 ====================
+function renderDelivery() {
+  let list = data.delivery.filter(x => isThisMonth(x.date, currentMonth));
+  if (dvFilter !== 'all') list = list.filter(x => x.platform === dvFilter);
+  if (dvSearch) list = list.filter(x => x.platform.toLowerCase().includes(dvSearch) || (x.note||'').toLowerCase().includes(dvSearch));
+  list.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  document.getElementById('deliveryBody').innerHTML = list.length ? list.map(x => `
+    <tr><td>${x.date}</td><td><span class="tag ${deliveryTagClass(x.platform)}">${x.platform}</span></td>
+    <td class="amt" style="color:var(--success)">${x.orders||0}</td>
+    <td class="price"><strong>¥${x.amount.toFixed(2)}</strong></td>
+    <td style="color:var(--muted)">${x.orders ? '¥'+(x.amount/x.orders).toFixed(2) : '-'}</td>
+    <td style="color:var(--muted);font-size:12px">${x.note||'-'}</td>
+    <td><div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm" onclick="openModal('delivery',${x.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="delItem('delivery',${x.id})">🗑️</button></div></td></tr>
+  `).join('') : '<tr><td colspan="7"><div class="empty"><div class="ei">📭</div>暂无配送费记录</div></td></tr>';
+
+  // 平台汇总卡片
+  const platforms = ['美团','饿了么','自配送','达达','顺丰','其他'];
+  const colors = {'美团':'#e8a838','饿了么':'#3b82c4','自配送':'#2d9d5e','达达':'#ff6b35','顺丰':'#333','其他':'#8a7a6a'};
+  const mD = data.delivery.filter(x => isThisMonth(x.date, currentMonth));
+  document.getElementById('deliverySummaryGrid').innerHTML = platforms.map(p => {
+    const items = mD.filter(x=>x.platform===p);
+    const val = items.reduce((s,x)=>s+x.amount,0);
+    const orders = items.reduce((s,x)=>s+(x.orders||0),0);
+    return `<div class="stat-card" style="padding:14px;box-shadow:var(--shadow);border-left:4px solid ${colors[p]}">
+      <div class="stat-label" style="font-size:12px">${p}</div>
+      <div class="stat-value" style="font-size:20px;color:${colors[p]}">${fmtMoney(val)}</div>
+      <div class="stat-sub" style="font-size:11px">${orders}单</div>
+    </div>`;
+  }).join('');
+
+  const totalAmount = mD.reduce((s,x)=>s+x.amount,0);
+  const totalOrders = mD.reduce((s,x)=>s+(x.orders||0),0);
+  document.getElementById('dv-total').textContent = fmtMoney(totalAmount);
+  document.getElementById('dv-orders').textContent = totalOrders;
+  document.getElementById('dv-records').textContent = mD.length;
+  document.getElementById('dv-avg').textContent = totalOrders ? fmtMoney(totalAmount/totalOrders) : '¥0';
+  document.getElementById('dl-count').textContent = mD.length + ' 条';
+  document.getElementById('nav-delivery').textContent = data.delivery.length;
+}
+
+// ==================== 月度报表 ====================
+function renderReport() {
+  const months = new Set();
+  data.kuailv.forEach(x => x.date && months.add(x.date.substring(0,7)));
+  data.cost.forEach(x => x.date && months.add(x.date.substring(0,7)));
+  data.delivery.forEach(x => x.date && months.add(x.date.substring(0,7)));
+  const sortedMonths = [...months].sort().reverse().slice(0, 12);
+
+  document.getElementById('reportBody').innerHTML = sortedMonths.length ? sortedMonths.map(m => {
+    const kv = data.kuailv.filter(x => x.date && x.date.startsWith(m));
+    const ct = data.cost.filter(x => x.date && x.date.startsWith(m));
+    const dv = data.delivery.filter(x => x.date && x.date.startsWith(m));
+    const s1 = kv.filter(x=>x.category==='shop').reduce((s,x)=>s+x.qty*x.price,0);
+    const s2 = kv.filter(x=>x.category==='taste').reduce((s,x)=>s+x.qty*x.price,0);
+    const s3 = kv.filter(x=>x.category==='home').reduce((s,x)=>s+x.qty*x.price,0);
+    const s4 = kv.filter(x=>x.category==='self').reduce((s,x)=>s+x.qty*x.price,0);
+    const purchase = s1+s2+s3+s4;
+    const cost = ct.reduce((s,x)=>s+x.amount,0);
+    const delivery = dv.reduce((s,x)=>s+x.amount,0);
+    const [y,mo] = m.split('-');
+    return `<tr><td><strong>${y}年${parseInt(mo)}月</strong></td><td class="price">${fmtMoney(s1)}</td><td class="price">${fmtMoney(s2)}</td><td class="price">${fmtMoney(s3)}</td><td class="price">${fmtMoney(s4)}</td><td class="price"><strong>${fmtMoney(purchase)}</strong></td><td class="price"><strong>${fmtMoney(cost)}</strong></td><td class="price"><strong>${fmtMoney(delivery)}</strong></td><td class="price" style="color:var(--danger)"><strong>${fmtMoney(purchase+cost+delivery)}</strong></td></tr>`;
+  }).join('') : '<tr><td colspan="9"><div class="empty">暂无数据</div></td></tr>';
+
+  // 月度支出柱状图
+  const maxVal = Math.max(...sortedMonths.map(m => {
+    const kv = data.kuailv.filter(x => x.date && x.date.startsWith(m)).reduce((s,x)=>s+x.qty*x.price,0);
+    const ct = data.cost.filter(x => x.date && x.date.startsWith(m)).reduce((s,x)=>s+x.amount,0);
+    const dv = data.delivery.filter(x => x.date && x.date.startsWith(m)).reduce((s,x)=>s+x.amount,0);
+    return kv+ct+dv;
+  }), 1);
+  document.getElementById('reportBars').innerHTML = sortedMonths.map(m => {
+    const kv = data.kuailv.filter(x => x.date && x.date.startsWith(m)).reduce((s,x)=>s+x.qty*x.price,0);
+    const ct = data.cost.filter(x => x.date && x.date.startsWith(m)).reduce((s,x)=>s+x.amount,0);
+    const dv = data.delivery.filter(x => x.date && x.date.startsWith(m)).reduce((s,x)=>s+x.amount,0);
+    const total = kv+ct+dv;
+    const [y,mo] = m.split('-');
+    return `<div class="compare-row"><div class="compare-label">${parseInt(mo)}月</div><div class="compare-bar-wrap"><div style="display:flex;height:24px;border-radius:4px;overflow:hidden"><div style="width:${kv/total*100||0}%;background:var(--primary)" title="采购:${fmtMoney(kv)}"></div><div style="width:${ct/total*100||0}%;background:var(--danger)" title="成本:${fmtMoney(ct)}"></div><div style="width:${dv/total*100||0}%;background:var(--purple)" title="配送费:${fmtMoney(dv)}"></div></div></div><div class="compare-val">${fmtMoneyShort(total)}</div></div>`;
+  }).join('');
+
+  // 月度成本柱状图
+  const costCats = [{key:'food',color:'var(--danger)'},{key:'packaging',color:'var(--info)'},{key:'utility',color:'var(--warning)'},{key:'labor',color:'var(--success)'},{key:'rent',color:'var(--purple)'},{key:'other',color:'#999'}];
+  document.getElementById('reportCostBars').innerHTML = sortedMonths.map(m => {
+    const ct = data.cost.filter(x => x.date && x.date.startsWith(m));
+    const total = ct.reduce((s,x)=>s+x.amount,0);
+    const [y,mo] = m.split('-');
+    return `<div class="compare-row"><div class="compare-label">${parseInt(mo)}月</div><div class="compare-bar-wrap"><div style="display:flex;height:24px;border-radius:4px;overflow:hidden;background:#f0ebe5">${costCats.map(c => { const v = ct.filter(x=>x.category===c.key).reduce((s,x)=>s+x.amount,0); return `<div style="width:${v/total*100||0}%;background:${c.color}" title="${costCatLabel(c.key)}:${fmtMoney(v)}"></div>`; }).join('')}</div></div><div class="compare-val">${fmtMoneyShort(total)}</div></div>`;
+  }).join('');
+}
+
+// ==================== 导出 ====================
+function exportCSV(type) {
+  let csv = '', filename = '';
+  if (type === 'kuailv') {
+    csv = '日期,商品名称,分类,数量,单位,单价,小计,备注\n';
+    data.kuailv.forEach(x => { csv += `${x.date},${x.name},${catLabel(x.category)},${x.qty},${x.unit},${x.price},${(x.qty*x.price).toFixed(2)},${x.note||''}\n`; });
+    filename = '快驴购物账单_' + today() + '.csv';
+  } else if (type === 'cost') {
+    csv = '日期,成本项目,类别,金额,备注\n';
+    data.cost.forEach(x => { csv += `${x.date},${x.name},${costCatLabel(x.category)},${x.amount},${x.note||''}\n`; });
+    filename = '店内成本_' + today() + '.csv';
+  } else if (type === 'delivery') {
+    csv = '日期,配送平台,订单数,配送费,单均,备注\n';
+    data.delivery.forEach(x => { csv += `${x.date},${x.platform},${x.orders||0},${x.amount},${x.orders?(x.amount/x.orders).toFixed(2):0},${x.note||''}\n`; });
+    filename = '配送费支出_' + today() + '.csv';
+  } else if (type === 'report') {
+    csv = '月份,店内产品,尝新产品,家用产品,自用产品,采购总额,店内成本,配送费,合计支出\n';
+    const months = new Set();
+    data.kuailv.forEach(x => x.date && months.add(x.date.substring(0,7)));
+    data.cost.forEach(x => x.date && months.add(x.date.substring(0,7)));
+    data.delivery.forEach(x => x.date && months.add(x.date.substring(0,7)));
+    [...months].sort().forEach(m => {
+      const kv = data.kuailv.filter(x => x.date && x.date.startsWith(m));
+      const ct = data.cost.filter(x => x.date && x.date.startsWith(m));
+      const dv = data.delivery.filter(x => x.date && x.date.startsWith(m));
+      const s1 = kv.filter(x=>x.category==='shop').reduce((s,x)=>s+x.qty*x.price,0);
+      const s2 = kv.filter(x=>x.category==='taste').reduce((s,x)=>s+x.qty*x.price,0);
+      const s3 = kv.filter(x=>x.category==='home').reduce((s,x)=>s+x.qty*x.price,0);
+      const s4 = kv.filter(x=>x.category==='self').reduce((s,x)=>s+x.qty*x.price,0);
+      const p = s1+s2+s3+s4; const c = ct.reduce((s,x)=>s+x.amount,0); const d = dv.reduce((s,x)=>s+x.amount,0);
+      csv += `${m},${s1.toFixed(2)},${s2.toFixed(2)},${s3.toFixed(2)},${s4.toFixed(2)},${p.toFixed(2)},${c.toFixed(2)},${d.toFixed(2)},${(p+c+d).toFixed(2)}\n`;
+    });
+    filename = '月度报表_' + today() + '.csv';
+  }
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+  showToast('数据已导出');
+}
+function exportAll() {
+  exportCSV('kuailv'); setTimeout(() => exportCSV('cost'), 300);
+  setTimeout(() => exportCSV('delivery'), 600); setTimeout(() => exportCSV('report'), 900);
+}
+
+// ==================== 刷新 ====================
+function refreshAll() {
+  renderDashboard(); renderKuailv(); renderCost(); renderDelivery();
+  const dp = document.getElementById('panel-daily'); if (dp.classList.contains('active')) renderDaily();
+  const rp = document.getElementById('panel-report'); if (rp.classList.contains('active')) renderReport();
+}
+
+// ==================== 初始化 ====================
+document.getElementById('monthLabel').textContent = monthLabel(currentMonth);
+loadData();
+refreshAll();
+</script>
+</body>
+</html>
