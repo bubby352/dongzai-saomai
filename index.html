@@ -319,6 +319,7 @@ tbody tr:last-child td { border-bottom: none; }
 .fab { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: #fff; border: none; font-size: 26px; cursor: pointer; z-index: 300; box-shadow: 0 4px 20px rgba(232,93,58,0.4); display: none; align-items: center; justify-content: center; transition: transform 0.2s; }
 .fab:hover { transform: scale(1.08); }
 @media(min-width: 769px) { .fab { display: flex; } }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
 /* 日期选择 */
 .date-nav { display: flex; align-items: center; gap: 8px; }
@@ -368,6 +369,7 @@ tbody tr:last-child td { border-bottom: none; }
         <button onclick="changeMonth(1)">›</button>
       </div>
       <button class="btn btn-outline btn-sm" onclick="exportAll()">📥 导出全部</button>
+      <span id="syncStatus" style="font-size:11px;color:var(--success);display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block;animation:pulse 2s infinite"></span>已同步</span>
     </div>
   </div>
 
@@ -645,8 +647,10 @@ tbody tr:last-child td { border-bottom: none; }
 <div class="toast" id="toast"><span id="toastText"></span></div>
 
 <script>
-// ==================== 数据层 ====================
-const KEY = 'dz_workbench_v4';
+// ==================== 数据层（云端共享） ====================
+const API_BASE = 'https://bubby352.github.io/dongzai-saomai'; // 静态页面地址
+// 后端API地址（公网，3人共享数据）
+let API_URL = 'https://a55b955b1d56e416-81-71-85-69.serveousercontent.com';
 let data = { kuailv: [], cost: [], delivery: [] };
 let currentMonth = new Date();
 let kvFilter = 'all', kvSearch = '';
@@ -654,25 +658,104 @@ let ctFilter = 'all', ctSearch = '';
 let dvFilter = 'all', dvSearch = '';
 let dlRange = 'month';
 let dailyAllExpand = false;
+let isOnline = true; // 在线模式
+let syncTimer = null;
 
-function loadData() {
-  const s = localStorage.getItem(KEY);
+async function loadData() {
+  if (isOnline) {
+    try {
+      const resp = await fetch(API_URL + '/api/data');
+      if (resp.ok) {
+        const db = await resp.json();
+        data.kuailv = db.kuailv || [];
+        data.cost = db.cost || [];
+        data.delivery = db.delivery || [];
+        localStorage.setItem('dz_cloud_cache', JSON.stringify(data));
+        return;
+      }
+    } catch(e) { console.warn('云端加载失败，使用本地缓存'); }
+  }
+  // 本地缓存兜底
+  const s = localStorage.getItem('dz_cloud_cache');
   if (s) {
-    try { data = JSON.parse(s); if(!data.delivery) data.delivery=[]; } catch(e) { initSample(); }
-  } else {
-    initSample();
+    try { data = JSON.parse(s); if(!data.delivery) data.delivery=[]; } catch(e) {}
   }
 }
-function saveData() { localStorage.setItem(KEY, JSON.stringify(data)); }
+
+async function saveData() {
+  // 本地缓存
+  localStorage.setItem('dz_cloud_cache', JSON.stringify(data));
+  // 云端保存由具体的增删改操作处理
+}
+
 function genId(arr) { return arr.length ? Math.max(...arr.map(x=>x.id))+1 : 1; }
 function today() { return new Date().toISOString().split('T')[0]; }
 
-function initSample() {
-  data.kuailv = [];
-  data.cost = [];
-  data.delivery = [];
-  saveData();
+// 云端添加
+async function cloudAdd(type, item) {
+  if (!isOnline) return;
+  try {
+    const resp = await fetch(API_URL + '/api/' + type, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(item)
+    });
+    const result = await resp.json();
+    if (result.ok && result.item) {
+      // 更新本地ID为服务器分配的ID
+      const local = data[type].find(x => x === item);
+      if (local) local.id = result.item.id;
+    }
+  } catch(e) { console.warn('云端保存失败'); }
 }
+
+// 云端更新
+async function cloudUpdate(type, id, item) {
+  if (!isOnline) return;
+  try {
+    await fetch(API_URL + '/api/' + type + '/' + id, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(item)
+    });
+  } catch(e) { console.warn('云端更新失败'); }
+}
+
+// 云端删除
+async function cloudDelete(type, id) {
+  if (!isOnline) return;
+  try {
+    await fetch(API_URL + '/api/' + type + '/' + id, { method: 'DELETE' });
+  } catch(e) { console.warn('云端删除失败'); }
+}
+
+// 定时同步（每15秒拉取一次最新数据）
+async function syncFromCloud() {
+  if (!isOnline) return;
+  try {
+    const s = document.getElementById('syncStatus');
+    if (s) s.innerHTML = '<span style="width:8px;height:8px;border-radius:50%;background:var(--warning);display:inline-block"></span>同步中...';
+    const resp = await fetch(API_URL + '/api/data');
+    if (resp.ok) {
+      const db = await resp.json();
+      data.kuailv = db.kuailv || [];
+      data.cost = db.cost || [];
+      data.delivery = db.delivery || [];
+      localStorage.setItem('dz_cloud_cache', JSON.stringify(data));
+      refreshAll();
+      if (s) s.innerHTML = '<span style="width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block;animation:pulse 2s infinite"></span>已同步';
+    }
+  } catch(e) {
+    const s = document.getElementById('syncStatus');
+    if (s) s.innerHTML = '<span style="width:8px;height:8px;border-radius:50%;background:var(--danger);display:inline-block"></span>离线';
+  }
+}
+
+function startSync() {
+  if (syncTimer) clearInterval(syncTimer);
+  syncTimer = setInterval(syncFromCloud, 15000); // 每15秒同步
+}
+
 
 // ==================== 工具 ====================
 function fmtMoney(n) { return '¥' + Number(n).toFixed(2); }
@@ -787,8 +870,14 @@ function saveModal(type, id) {
     const date = document.getElementById('m-date').value || today();
     const note = document.getElementById('m-note').value.trim();
     if (!name || !qty || !price || isNaN(qty) || isNaN(price)) { showToast('请填写完整信息','error'); return; }
-    if (id) { Object.assign(data.kuailv.find(x=>x.id===id), {name,category,qty,unit,price,date,note}); }
-    else { data.kuailv.push({id:genId(data.kuailv),name,category,qty,unit,price,date,note}); }
+    if (id) {
+      Object.assign(data.kuailv.find(x=>x.id===id), {name,category,qty,unit,price,date,note});
+      cloudUpdate('kuailv', id, data.kuailv.find(x=>x.id===id));
+    } else {
+      const item = {id:genId(data.kuailv),name,category,qty,unit,price,date,note};
+      data.kuailv.push(item);
+      cloudAdd('kuailv', item);
+    }
     showToast('采购记录已保存');
   } else if (type === 'cost') {
     const name = document.getElementById('m-name').value.trim();
@@ -797,8 +886,14 @@ function saveModal(type, id) {
     const date = document.getElementById('m-date').value || today();
     const note = document.getElementById('m-note').value.trim();
     if (!name || !amount || isNaN(amount)) { showToast('请填写完整信息','error'); return; }
-    if (id) { Object.assign(data.cost.find(x=>x.id===id), {name,category,amount,date,note}); }
-    else { data.cost.push({id:genId(data.cost),name,category,amount,date,note}); }
+    if (id) {
+      Object.assign(data.cost.find(x=>x.id===id), {name,category,amount,date,note});
+      cloudUpdate('cost', id, data.cost.find(x=>x.id===id));
+    } else {
+      const item = {id:genId(data.cost),name,category,amount,date,note};
+      data.cost.push(item);
+      cloudAdd('cost', item);
+    }
     showToast('成本记录已保存');
   } else if (type === 'delivery') {
     const platform = document.getElementById('m-platform').value;
@@ -807,8 +902,14 @@ function saveModal(type, id) {
     const date = document.getElementById('m-date').value || today();
     const note = document.getElementById('m-note').value.trim();
     if (isNaN(amount)) { showToast('请填写配送费金额','error'); return; }
-    if (id) { Object.assign(data.delivery.find(x=>x.id===id), {platform,orders,amount,date,note}); }
-    else { data.delivery.push({id:genId(data.delivery),platform,orders,amount,date,note}); }
+    if (id) {
+      Object.assign(data.delivery.find(x=>x.id===id), {platform,orders,amount,date,note});
+      cloudUpdate('delivery', id, data.delivery.find(x=>x.id===id));
+    } else {
+      const item = {id:genId(data.delivery),platform,orders,amount,date,note};
+      data.delivery.push(item);
+      cloudAdd('delivery', item);
+    }
     showToast('配送费记录已保存');
   }
   saveData(); closeModal(); refreshAll();
@@ -816,6 +917,7 @@ function saveModal(type, id) {
 function delItem(type, id) {
   if (!confirm('确认删除？')) return;
   data[type] = data[type].filter(x => x.id !== id);
+  cloudDelete(type, id);
   saveData(); refreshAll(); showToast('已删除');
 }
 function setFilterChip(btn) {
@@ -1258,8 +1360,19 @@ function refreshAll() {
 
 // ==================== 初始化 ====================
 document.getElementById('monthLabel').textContent = monthLabel(currentMonth);
-loadData();
-refreshAll();
+
+// 启动时加载云端数据
+(async function() {
+  await loadData();
+  refreshAll();
+  startSync(); // 开启定时同步
+  console.log('✅ 云端共享模式已启用');
+})();
+
+// 页面获得焦点时同步一次
+window.addEventListener('focus', () => {
+  syncFromCloud();
+});
 </script>
 </body>
 </html>
